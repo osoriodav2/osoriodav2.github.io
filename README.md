@@ -1,1 +1,0 @@
-# osoriodav2.github.io
