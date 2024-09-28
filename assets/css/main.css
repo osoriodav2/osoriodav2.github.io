@@ -212,28 +212,21 @@ input, select, textarea {
 /* BG */
 
 	#bg {
-		-moz-animation: bg 60s linear infinite;
-		-webkit-animation: bg 60s linear infinite;
-		-ms-animation: bg 60s linear infinite;
-		animation: bg 60s linear infinite;
-		-moz-backface-visibility: hidden;
-		-webkit-backface-visibility: hidden;
-		-ms-backface-visibility: hidden;
-		backface-visibility: hidden;
-		-moz-transform: translate3d(0,0,0);
-		-webkit-transform: translate3d(0,0,0);
-		-ms-transform: translate3d(0,0,0);
-		transform: translate3d(0,0,0);
-	/* Set your background with this */
+ 		animation: bg-scroll 60s linear infinite;
+  		backface-visibility: hidden;
+ 		transform: translate3d(0, 0, 0);
 
-		background: #348cb2 url("images/bg.jpg") bottom left;
-		background-repeat: repeat-x;
-		height: 100%;
-		left: 0;
-		opacity: 1;
+    /* Set the new background image and dimensions */
+  		background: url("images/bg.jpg") no-repeat center center;
+   		background-size: cover; /* Ensures the image fills the screen */
+
+ 		height: 100%;
+  		width: 100%;
 		position: fixed;
-		top: 0;
+ 		top: 0;
+ 		left: 0;
 	}
+
 
 	@-moz-keyframes bg {
 		0% {
@@ -283,21 +276,13 @@ input, select, textarea {
 		}
 	}
 
-	@keyframes bg {
-		0% {
-			-moz-transform: translate3d(0,0,0);
-			-webkit-transform: translate3d(0,0,0);
-			-ms-transform: translate3d(0,0,0);
-			transform: translate3d(0,0,0);
-		}
-
-		100% {
-			-moz-transform: translate3d(-2250px,0,0);
-			-webkit-transform: translate3d(-2250px,0,0);
-			-ms-transform: translate3d(-2250px,0,0);
-			transform: translate3d(-2250px,0,0);
-		}
-	}
+	@keyframes bg-scroll {
+    	0% {
+        	transform: translateX(0);
+    	}
+    	100% {
+        	transform: translateX(-12881px); /* Moves the image across the screen */
+    	}
 
 	#bg {
 		background-size: 2684px auto;
