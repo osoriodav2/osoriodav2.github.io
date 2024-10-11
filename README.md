@@ -1,1 +1,2 @@
-Personal website to house my various projects, experiences, and contact information.
+**Personal Website**
+Created to house my various projects, experiences, and contact information.
