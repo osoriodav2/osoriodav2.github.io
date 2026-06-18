@@ -562,7 +562,7 @@
       text-align: left;
     }
 
-    input[type="text"], textarea {
+    input[type="text"], input[type="email"], textarea {
       width: 100%;
       padding: 0.95rem 1.2rem;
       border-radius: var(--radius-sm);
@@ -573,7 +573,7 @@
       transition: border-color 0.25s ease, box-shadow 0.25s ease;
     }
 
-    input[type="text"]:focus, textarea:focus {
+    input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
       outline: none;
       border-color: var(--accent);
       box-shadow: 0 0 0 4px var(--accent-tint);
@@ -606,6 +606,22 @@
       transform: translateY(-2px);
       box-shadow: var(--shadow-md);
     }
+
+    input[type="submit"]:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .form-status {
+      font-size: 0.88rem;
+      font-weight: 600;
+      min-height: 1.2em;
+      margin-top: -0.2rem;
+    }
+
+    .form-status.success { color: #3F8A5C; }
+    .form-status.error { color: var(--accent); }
 
     input[type="reset"] {
       background: transparent;
@@ -909,13 +925,16 @@
     </div>
     <div class="card contact-card reveal">
       <p>Have a question, opportunity, or project in mind? Send a message and I'll get back to you as soon as I can.</p>
-      <form id="contactForm" onsubmit="sendMail(); return false;">
-        <input type="text" id="subject" placeholder="Subject" required />
-        <textarea id="message" placeholder="Message" rows="5" required></textarea>
+      <form id="contactForm">
+        <input type="text" id="name" name="name" placeholder="Your Name" required />
+        <input type="email" id="email" name="email" placeholder="Your Email" required />
+        <input type="text" id="subject" name="subject" placeholder="Subject" required />
+        <textarea id="message" name="message" placeholder="Message" rows="5" required></textarea>
         <div class="form-actions">
           <input type="submit" value="Send Message" />
           <input type="reset" value="Reset" />
         </div>
+        <p id="form-status" class="form-status"></p>
       </form>
       <ul class="socials">
         <li><a href="https://linkedin.com/in/david-alexander-osorio" target="_blank" rel="noopener" aria-label="LinkedIn">in</a></li>
@@ -934,14 +953,6 @@
 <div id="toast"></div>
 
 <script>
-  function sendMail() {
-    const subject = document.getElementById('subject').value;
-    const message = document.getElementById('message').value;
-    console.log("Form Submitted:", { subject, message });
-    showToast("Message queued — Subject: " + (subject || "no subject"));
-    document.getElementById('contactForm').reset();
-  }
-
   function showToast(text) {
     const toast = document.getElementById('toast');
     toast.textContent = text;
@@ -949,6 +960,38 @@
     clearTimeout(window.__toastTimer);
     window.__toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
   }
+
+  /* Contact form: opens the visitor's email client via mailto */
+  (function contactForm() {
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+    const statusEl = document.getElementById('form-status');
+    const RECIPIENT = 'osoriodav2@gmail.com';
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const subject = form.subject.value.trim();
+      const message = form.message.value.trim();
+
+      const mailSubject = `Portfolio contact: ${subject}`;
+      const mailBody =
+        `${message}\n\n---\nFrom: ${name}\nReply to: ${email}`;
+
+      const mailtoLink =
+        `mailto:${RECIPIENT}` +
+        `?subject=${encodeURIComponent(mailSubject)}` +
+        `&body=${encodeURIComponent(mailBody)}`;
+
+      window.location.href = mailtoLink;
+
+      statusEl.textContent = 'Opening your email app — finish sending it there.';
+      statusEl.className = 'form-status success';
+      showToast('Opening your email client…');
+    });
+  })();
 
   /* Scroll progress */
   (function scrollProgress() {
